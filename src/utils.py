@@ -1,11 +1,7 @@
 import pygetwindow as gw
 import numpy as np
 import mss, cv2, time, os, keyboard
-
-SHOP_ROI = (402, 815, 678, 925)
-ELIXIR_ROI = (398, 974, 461, 1044)
-ELIXIR_FRAME = (407, 984, 452, 1032)
-LEFT_SHOP_FRAME = (117, 941, 192, 1037)
+from config import WINDOW_SIZE
 
 def get_window_rect(title_substr):
     wins = gw.getWindowsWithTitle(title_substr)
@@ -17,8 +13,8 @@ def get_window_rect(title_substr):
         "width": win.width,
         "height": win.height
     }
-    if dimensions["width"] != 576 or dimensions["height"] != 1070:
-        raise RuntimeError("Window size is not 576x1070")
+    if dimensions["width"] != WINDOW_SIZE["width"] or dimensions["height"] != WINDOW_SIZE["height"]:
+        raise RuntimeError(f"Window size is not {WINDOW_SIZE['width']}x{WINDOW_SIZE['height']}")
     return {
         "left": left,
         "top": top,

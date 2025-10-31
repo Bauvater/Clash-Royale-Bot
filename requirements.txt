@@ -1,5 +1,8 @@
 opencv-python
 mss
-keyboard
 pygetwindow
 numpy
+torch
+torchvision
+pyautogui
+pynput

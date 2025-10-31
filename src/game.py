@@ -1,3 +1,4 @@
+from config import REGIONS
 
 class GameInfo:
     def __init__(self):
@@ -10,16 +11,12 @@ class GameInfo:
                            "princess", "royal_ghost", "skeleton_dragons",
                            "skeleton_king", "spear_goblin", "valkyrie",
                            "witch", "wizard")
-        self.regions = {
-            "SHOP": (100, 923, 387, 1049),
-            "ELIXIR": (398, 974, 461, 1044)
-        }
+        self.regions = REGIONS
 
 class GameState:
     def __init__(self):
         self.player_health = 10
-        self.elixir = 4
-
-class GameController:
-    pass
-
+        self.elixir = 0
+        self.shop_characters = []
+        self.bench_characters = []
+        self.field_characters = []
