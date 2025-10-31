@@ -2,6 +2,8 @@ import pygetwindow as gw
 import numpy as np
 import mss, cv2, time, os, keyboard
 from config import WINDOW_SIZE
+from PIL import Image, ImageDraw, ImageFont
+import shutil
 
 def get_window_rect(title_substr):
     wins = gw.getWindowsWithTitle(title_substr)
@@ -36,12 +38,8 @@ def capture_window(title_substr):
         img = np.array(screenshot)
         return img
 
-def determine_roi(window_title, save_dir=None):
-    window_name = "Select ROI - Click Top-Left and Bottom-Right"
+def determine_roi(window_title, message="Select ROI"):
     img = capture_window(window_title)
-
-    if save_dir:
-        cv2.imwrite(save_dir, img)
 
     clicks = []
     roi_result = {}
@@ -63,9 +61,9 @@ def determine_roi(window_title, save_dir=None):
                 cv2.destroyWindow("Cropped ROI")
                 roi_result["roi"] = (x1n, y1n, x2n, y2n)
                 print(f"Final ROI = ({x1n}, {y1n}, {x2n}, {y2n})")
-                # close main window to finish interaction
-                cv2.destroyWindow(window_name)
+                cv2.destroyAllWindows()
 
+    window_name = f"Select ROI - {message}"
     cv2.namedWindow(window_name, cv2.WINDOW_AUTOSIZE)
     cv2.setMouseCallback(window_name, click_event)
     cv2.imshow(window_name, img)
@@ -99,3 +97,30 @@ def screenshot_collector(roi, window_title="Bluestacks", save_dir="templates"):
         if keyboard.is_pressed("q"):
             print("Exiting image collector.") # prints exit message
             break # exits loop
+
+def create_placeholder_images():
+    game_over_dir = "templates/game_over"
+    if os.path.exists(game_over_dir):
+        shutil.rmtree(game_over_dir)
+    os.makedirs(game_over_dir)
+
+    width, height = 200, 100
+    try:
+        font = ImageFont.truetype("c:/Windows/Fonts/arial.ttf", 40)
+    except IOError:
+        font = ImageFont.load_default()
+
+    # Victory Image
+    victory_img = Image.new('RGB', (width, height), color = 'black')
+    d = ImageDraw.Draw(victory_img)
+    d.text((10,10), "Victory", font=font, fill=(255,255,0))
+    victory_img.save(f"{game_over_dir}/victory.png")
+
+    # Defeat Image
+    defeat_img = Image.new('RGB', (width, height), color = 'black')
+    d = ImageDraw.Draw(defeat_img)
+    d.text((10,10), "Defeat", font=font, fill=(255,0,0))
+    defeat_img.save(f"{game_over_dir}/defeat.png")
+
+if __name__ == "__main__":
+    create_placeholder_images()

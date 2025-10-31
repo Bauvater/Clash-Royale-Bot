@@ -12,6 +12,7 @@ class GameInfo:
                            "skeleton_king", "spear_goblin", "valkyrie",
                            "witch", "wizard")
         self.regions = REGIONS
+        self.game_over_templates = ["victory.png", "defeat.png"]
 
 class GameState:
     def __init__(self):
